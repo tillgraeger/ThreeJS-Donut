@@ -2,6 +2,7 @@ import './style.css'
 
 import * as THREE from 'three'
 import gsap from 'gsap'
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 
 const scene = new THREE.Scene();
 
@@ -32,15 +33,18 @@ PointLight.position.set(30, 45, 30);
 
 sphere.add(PointLight);
 
+const controls = new OrbitControls(camera, renderer.domElement);
+
 function animate() {
     requestAnimationFrame(animate);
-
-    sphere.rotation.y += 0.03; 
 
     renderer.render(scene, camera);
 }
 animate();
 
-const tl = gsap.timeline( { defaults: { duration: 2.5 } } );
-tl.fromTo(sphere.position, {z:-100}, {z: 0});
-tl.fromTo('#title', {opacity: 0}, {opacity: 1});
+const tl1 = gsap.timeline( { defaults: { duration: 2.5 } } );
+const tl2 = gsap.timeline( { defaults: { duration: 2.5 } });
+
+tl1.fromTo(sphere.position, {z:-100}, {z: 0});
+tl2.fromTo(sphere.rotation, {y: 0}, {y: 5.5});
+tl1.fromTo('#title', {opacity: 0}, {opacity: 1});

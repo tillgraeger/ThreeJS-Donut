@@ -8,11 +8,12 @@
 h1 {
   position: relative;
   z-index: 2;
-  color: #F9F6EE;
+  color: #f9f6ee;
   width: 230px;
   margin: auto;
 }
 
-body, html {
-  font-family: 'Poppins', sans-serif;
+body,
+html {
+  font-family: "Poppins", sans-serif;
 }
