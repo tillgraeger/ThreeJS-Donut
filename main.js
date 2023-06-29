@@ -13,35 +13,26 @@ const renderer = new THREE.WebGLRenderer({
   canvas: document.querySelector('#bg'),
 });
 renderer.render(scene, camera);
+scene.background = new THREE.Color(0xff6e0c);
 
 renderer.setPixelRatio(window.devicePixelRatio);
 renderer.setSize(window.innerWidth, window.innerHeight);
-camera.position.setZ(30);
+camera.position.setZ(0.25);
 camera.position.setX(0);
 
 renderer.render(scene, camera);
 
-
-
-// const geometry = new THREE.SphereGeometry(15, 128, 128);
-// const material = new THREE.MeshStandardMaterial({ color: 0xF9F6EE });
-// const sphere = new THREE.Mesh(geometry, material);
-var donut, icing;
-
-// scene.add(sphere);
-
 const loader = new GLTFLoader();
+var donut = undefined;
+var icing = undefined;
 
 loader.load( '/donut.glb', function ( gltf ) {
-
   donut = gltf.scene.children[0];
   icing = gltf.scene.children[1];
-  donut.add(PointLight);
-  donut.scale.set(200, 200, 200);
-  icing.scale.set(200, 200, 200);
-	scene.add( donut );
-  scene.add( icing );
-}, undefined, function ( error ) {
+  scene.add( gltf.scene );
+}, function(xhr) {
+  console.log( (xhr.loaded / xhr.total * 100) );
+}, function ( error ) {
 
 	console.error( error );
 
@@ -49,21 +40,30 @@ loader.load( '/donut.glb', function ( gltf ) {
 
 
 
-const PointLight = new THREE.PointLight(0xF9F6EE);
-PointLight.position.set(0, 10, -10);
+const PointLight = new THREE.PointLight( 0xFFFFFF );
+PointLight.position.set(0, 1, 1);
+scene.add(PointLight);
 
 const controls = new OrbitControls(camera, renderer.domElement);
+const tl1 = gsap.timeline();
+var animated = false;
+var startRotation = false;
 
 function animate() {
     requestAnimationFrame(animate);
-
     renderer.render(scene, camera);
+    while (donut != undefined && !animated) {
+      tl1.add(gsap.fromTo(donut.position, {x:0, y:0, z:-3}, {x:0, y:0, z: 0, duration: 1}));
+      tl1.add(gsap.fromTo(icing.position, {x:0, y:0, z:-3}, {x:0, y:0, z: 0, duration: 1}), "<");
+      tl1.add(gsap.fromTo('#title', {opacity: 0}, {opacity: 1, duration: 4}));
+      animated = true;
+      setTimeout(function() {
+        startRotation = true;
+      },1000);
+    }
+    if (startRotation) {
+      donut.rotation.y += 0.01;
+      icing.rotation.y += 0.01;
+    }
 }
 animate();
-
-const tl1 = gsap.timeline( { defaults: { duration: 2.5 } } );
-const tl2 = gsap.timeline( { defaults: { duration: 2.5 } });
-
-// tl1.fromTo(sphere.position, {z:-100}, {z: 0});
-// tl2.fromTo(sphere.rotation, {y: 0}, {y: 5.5});
-tl1.fromTo('#title', {opacity: 0}, {opacity: 1});

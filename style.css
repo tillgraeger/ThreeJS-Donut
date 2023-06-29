@@ -9,11 +9,17 @@ h1 {
   position: relative;
   z-index: 2;
   color: #f9f6ee;
-  width: 230px;
-  margin: auto;
+  width: 350px;
+  margin: 3rem auto;
+  font-size: 3rem;
 }
 
 body,
 html {
-  font-family: "Poppins", sans-serif;
+  font-family: "rocko", sans-serif;
+}
+
+@font-face {
+  font-family: "rocko";
+  src: url("/font/Rocko_FLF.ttf") format("truetype");
 }
