@@ -29,6 +29,8 @@ var icing = undefined;
 loader.load( '/donut.glb', function ( gltf ) {
   donut = gltf.scene.children[0];
   icing = gltf.scene.children[1];
+  donut.position.set(0, 0, -3);
+  icing.position.set(0, 0, -3);
   scene.add( gltf.scene );
 }, function(xhr) {
   console.log( (xhr.loaded / xhr.total * 100) );
@@ -48,18 +50,17 @@ const controls = new OrbitControls(camera, renderer.domElement);
 const tl1 = gsap.timeline();
 var animated = false;
 var startRotation = false;
-
 function animate() {
     requestAnimationFrame(animate);
     renderer.render(scene, camera);
     while (donut != undefined && !animated) {
       tl1.add(gsap.fromTo(donut.position, {x:0, y:0, z:-3}, {x:0, y:0, z: 0, duration: 1}));
       tl1.add(gsap.fromTo(icing.position, {x:0, y:0, z:-3}, {x:0, y:0, z: 0, duration: 1}), "<");
-      tl1.add(gsap.fromTo('#title', {opacity: 0}, {opacity: 1, duration: 4}));
+      tl1.add(gsap.fromTo('#title', {opacity: 0}, {opacity: 1, duration: 2}));
       animated = true;
       setTimeout(function() {
         startRotation = true;
-      },1000);
+      },1500);
     }
     if (startRotation) {
       donut.rotation.y += 0.01;
